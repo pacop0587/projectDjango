@@ -3,9 +3,44 @@ version: '3.8'
 services:
   web:
     build: .
+    container_name: django_app
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
     ports:
       - "8000:8000"
+    networks:
+      - project1_default
+  db:
+    image: postgres:16.4-alpine3.20
+    container_name: postgres_django
+    environment:
+      - "POSTGRES_USER=${POSTGRES_USER}"
+      - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
+      - "POSTGRES_DB=${POSTGRES_DB}"
+    ports:
+      - "5432:5432"
+    volumes:
+      - world-db:/var/lib/postgresql/data
+    networks:
+      - project1_default
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_django
+    environment:
+      - "PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}"
+      - "PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}"
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    networks:
+      - project1_default
+  
+volumes:
+  world-db:
+networks:
+  project1_default:
+
+
     
