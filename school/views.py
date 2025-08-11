@@ -19,15 +19,15 @@ def loginUser(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            login(request, user)
+            #login(request, user)
             return redirect('index')
         else:
             return render(request,
                   'login.html',
                   {'form': AuthenticationForm,
                    'error': 'Usuario y/o contraseña incorrecta'})
-
-    return render(request,
+    else:
+        return render(request,
                   'login.html',
                   {'form': AuthenticationForm,
                    'error':''})
